@@ -15,7 +15,6 @@ screen_width = 1000
 screen_height = 1000
 
 screen = pygame.display.set_mode((screen_width, screen_height))
-window = pygame.display.get_surface()
 answer = "DOPE LIES ARE GREAT"
 solve_state = "".join(["_" if x is not " " else " " for x in answer])
 
@@ -53,7 +52,6 @@ def get_solve_state(letter):
 
 
 def start():
-    global time_since_movement
     done = False
     while not done:
         clock.tick(60)
@@ -97,7 +95,7 @@ def update():
     shuffle_cursor()
 
 
-speed = 100
+delay = 100
 acceleration = 10
 
 # Method for cursor to move around and select a token
@@ -108,16 +106,16 @@ acceleration = 10
 def shuffle_cursor():
     global time_since_movement, speed, acceleration
     chosen_coord = random.choice(token_coords)
-    if speed >= 1000:
+    if delay >= 1000:
         # Where you get input for letter
         get_solve_state("E")
         # Returns money won
         return token_coords.index(chosen_coord)
     else:
-        if time_since_movement >= speed:
+        if time_since_movement >= delay:
             set_cursor_coords(chosen_coord[0], chosen_coord[1])
             time_since_movement = 0
-            speed += acceleration
+            delay += acceleration
             acceleration *= 2
 
 
