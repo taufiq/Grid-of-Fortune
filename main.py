@@ -36,8 +36,11 @@ done = False
 letters = list('abcdefghijklmnopqrstuvwxyz')
 command = ''
 
+#Initializes the recognizer
 recognizer = aiy.cloudspeech.get_recognizer()
+#Starts the microphone
 aiy.audio.get_recorder().start()
+#Teaches the recognizer to expect these phrases
 for letter in letters:
     recognizer.expect_phrase("letter " + letter)
 recognizer.expect_phrase("quit")
@@ -75,6 +78,7 @@ def get_solve_state(letter):
         score -= 200
         print("ALREADY FOUND")
 
+#Checks for winning / Losing condition: Score < 0 loss; all blanks filled = win
 def winning_condition():
     global score, done, solve_state
     if score < 0:
@@ -91,6 +95,7 @@ def winning_condition():
 
 
 
+#The main game loop
 def start():
     aiy.audio.say("To start, press V and say a letter, or quit to exit")
     global done, command
@@ -171,6 +176,7 @@ def guess_phrase():
             print("You Won!")
 
 
+#Updates all the necessary data for the game
 def update():
     global time_since_movement, count, token_coords, initial, command, score, tokens
     if initial is True:
@@ -213,6 +219,7 @@ def shuffle_cursor(letter):
             acceleration *= 2
 
 
+#Handles rendering stuff to the screen
 def render():
     global token_coords, cursor_coords, labels_render
     screen.fill(white)
