@@ -72,6 +72,7 @@ def get_solve_state(letter):
 
 
 def start():
+    aiy.audio.say("To start, press V and say a letter, or quit to exit")
     global done, command
     while not done:
         clock.tick(60)
@@ -80,7 +81,7 @@ def start():
                 done = True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_v:
-                    print("V Pressed")
+                    print("Waiting for input")
                     process_text(get_text())
 
 
@@ -121,15 +122,18 @@ def process_text(text):
 
     if not text:
         print("No audio heard")
+        aiy.audio.say("No audio heard")
     else:
         if "quit" in text:
             done = True
-        for letter in letters:
-            if "letter " + letter in text:
-                print("Letter is " + letter)
-                command = letter
-            else:
-                print("Invalid")
+        else:
+            for letter in letters:
+                if "letter " + letter in text:
+                    print("Letter is " + letter)
+                    command = letter
+                    break
+                else:
+                    print("Invalid")
 
 
 def update():
