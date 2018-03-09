@@ -1,6 +1,9 @@
 import pygame
 import random
 import time
+import aiy.audio
+import aiy.cloudspeech
+import aiy.voicehat
 
 clock = pygame.time.Clock()
 FPS = 60
@@ -28,7 +31,14 @@ font = pygame.font.SysFont("monospace", 65)
 done = False
 
 
+letters = list('abcdefghijklmnopqrstuvwxyz')
 command = ''
+
+recognizer = aiy.cloudspeech.get_recognizer()
+aiy.audio.get_recorder().start()
+for letter in letters:
+    recognizer.expect_phrase("letter " + letter)
+recognizer.expect_phrase("quit")
 
 
 def set_cursor_coords(x_pos, y_pos):
@@ -100,8 +110,10 @@ def create_tokens(token_list):
         start_x += prev_width + 32
 
 def get_text():
-    time.sleep(5)
-    return 'letter e'
+    text = recognizer.recognize()
+    time.sleep(2)
+    print("Recognized Text: " + text)
+    return text
 
 def process_text(text):
     global command, done, letters
@@ -135,7 +147,6 @@ def update():
 
 delay = 100
 acceleration = 10
-letters = list('abcdefghijklmnopqrstuvwxyz')
 
 # Method for cursor to move around and select a token
 # Then returns the index of the token AKA the money he chose
