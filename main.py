@@ -19,14 +19,16 @@ screen_width = 1000
 screen_height = 1000
 
 screen = pygame.display.set_mode((screen_width, screen_height))
-answer = "DOPE LIES ARE GREAT"
+answer = "BANANA"
 solve_state = "".join(["_" if x is not " " else " " for x in answer])
 
+tokens = [500, 200, 400, 100, 600, 450]
 token_coords = []
 cursor_coords = [[], [], []]
 
 pygame.init()
 font = pygame.font.SysFont("monospace", 65)
+score = 100
 
 done = False
 
@@ -50,7 +52,7 @@ def set_cursor_coords(x_pos, y_pos):
 
 def get_solve_state(letter):
     print("Solve State Called")
-    global solve_state, command
+    global solve_state, command, score
     letter = letter.upper()
     if letter not in solve_state:
         # Returns indices of found letter
@@ -61,14 +63,32 @@ def get_solve_state(letter):
             solve_state = "".join(tmp)
         # If letter chosen isnt found anywhere in solve state
         if len(indices) == 0:
+            aiy.audio.say("Letter not found")
             print("Not found :(")
+            score -= 200
             command = ''
         else:
             print(solve_state)
             command = ''
 
     else:
+        score -= 200
         print("ALREADY FOUND")
+
+def winning_condition():
+    global score, done, solve_state
+    if score < 0:
+        done = True
+        
+        aiy.audio.say("You Lost!")
+        print("You ran out of money. You Lost!")
+        return
+    if "_" not in solve_state:
+        done = True
+        aiy.audio.say("You Won!")
+        print("You Win!")
+        return
+
 
 
 def start():
@@ -83,6 +103,9 @@ def start():
                 if event.key == pygame.K_v:
                     print("Waiting for input")
                     process_text(get_text())
+                if event.key == pygame.K_c:
+                    print("Waiting for answer")
+                    guess_phrase()
 
 
         update()
@@ -112,8 +135,6 @@ def create_tokens(token_list):
 
 def get_text():
     text = recognizer.recognize()
-    time.sleep(2)
-    print("Recognized Text: " + text)
     return text
 
 def process_text(text):
@@ -124,6 +145,7 @@ def process_text(text):
         print("No audio heard")
         aiy.audio.say("No audio heard")
     else:
+        print("Recognized Text: " + text)
         if "quit" in text:
             done = True
         else:
@@ -135,17 +157,34 @@ def process_text(text):
                 else:
                     print("Invalid")
 
+def guess_phrase():
+    global done
+    text = recognizer.recognize()
+    if not text:
+        print("No audio heard")
+        aiy.audio.say("No audio heard")
+    else:
+        print("Recognized Text: " + text)
+        if text.lower() == answer.lower():
+            done = True
+            aiy.audio.say("You Won!")
+            print("You Won!")
+
 
 def update():
-    global time_since_movement, count, token_coords, initial, command
+    global time_since_movement, count, token_coords, initial, command, score, tokens
     if initial is True:
-        create_tokens([500, 200, 400, 100, 600, 450])
+        create_tokens(tokens)
         set_cursor_coords(token_coords[0][0], token_coords[0][1])
         initial = False
     time_since_movement += clock.get_time()
     print("Command is " + command)
+    winning_condition()
     if command:
-        shuffle_cursor(command)
+        res = shuffle_cursor(command)
+        if res:
+            score += tokens[res]
+        
 
 
 
@@ -181,6 +220,8 @@ def render():
     label = font.render(solve_state, True, blue)
     screen.blit(label, (screen_width/2 - label.get_width(),
                         screen_height - (label.get_height() / 2 * 3)))
+    score_font = font.render("Score: " + str(score), True, blue)
+    screen.blit(score_font, (screen_width/2, screen_height/2 ))
     for label in labels_render:
         screen.blit(label[0], (label[1], label[2]))
     pygame.draw.polygon(screen, red, cursor_coords, 0)
