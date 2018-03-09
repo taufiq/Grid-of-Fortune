@@ -1,5 +1,6 @@
 import pygame
 import random
+import time
 
 clock = pygame.time.Clock()
 FPS = 60
@@ -24,6 +25,11 @@ cursor_coords = [[], [], []]
 pygame.init()
 font = pygame.font.SysFont("monospace", 65)
 
+done = False
+
+
+command = ''
+
 
 def set_cursor_coords(x_pos, y_pos):
     global cursor_coords
@@ -33,7 +39,9 @@ def set_cursor_coords(x_pos, y_pos):
 
 
 def get_solve_state(letter):
-    global solve_state
+    print("Solve State Called")
+    global solve_state, command
+    letter = letter.upper()
     if letter not in solve_state:
         # Returns indices of found letter
         indices = [i for i, elem in enumerate(answer) if elem == letter]
@@ -44,20 +52,28 @@ def get_solve_state(letter):
         # If letter chosen isnt found anywhere in solve state
         if len(indices) == 0:
             print("Not found :(")
+            command = ''
         else:
             print(solve_state)
+            command = ''
 
     else:
         print("ALREADY FOUND")
 
 
 def start():
-    done = False
+    global done, command
     while not done:
         clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_v:
+                    print("V Pressed")
+                    process_text(get_text())
+
+
         update()
         render()
 
@@ -83,32 +99,56 @@ def create_tokens(token_list):
         token_coords.append([start_x, start_y])
         start_x += prev_width + 32
 
+def get_text():
+    time.sleep(5)
+    return 'letter e'
+
+def process_text(text):
+    global command, done, letters
+    text = text.lower()
+
+    if not text:
+        print("No audio heard")
+    else:
+        if "quit" in text:
+            done = True
+        for letter in letters:
+            if "letter " + letter in text:
+                print("Letter is " + letter)
+                command = letter
+            else:
+                print("Invalid")
+
 
 def update():
-    global time_since_movement, count, token_coords, initial
+    global time_since_movement, count, token_coords, initial, command
     if initial is True:
         create_tokens([500, 200, 400, 100, 600, 450])
         set_cursor_coords(token_coords[0][0], token_coords[0][1])
         initial = False
     time_since_movement += clock.get_time()
+    print("Command is " + command)
+    if command:
+        shuffle_cursor(command)
 
-    shuffle_cursor()
 
 
 delay = 100
 acceleration = 10
+letters = list('abcdefghijklmnopqrstuvwxyz')
 
 # Method for cursor to move around and select a token
 # Then returns the index of the token AKA the money he chose
 # Call after spinning
 
 
-def shuffle_cursor():
-    global time_since_movement, speed, acceleration
+
+def shuffle_cursor(letter):
+    global time_since_movement, delay, acceleration
     chosen_coord = random.choice(token_coords)
     if delay >= 1000:
         # Where you get input for letter
-        get_solve_state("E")
+        get_solve_state(letter)
         # Returns money won
         return token_coords.index(chosen_coord)
     else:
@@ -140,6 +180,4 @@ if __name__ == '__main__':
     main()
 
 
-def get_command():
-    # Get voice command
-    return 'COMMAND'
+
