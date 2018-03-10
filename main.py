@@ -32,11 +32,11 @@ for char in answer:
         solve_state += " "
 
 # Creates a list of monies user can get from spinning
-tokens = [500, 200, 400, 100, 600, 450]
+wedges = [500, 200, 400, 100, 600, 450]
 
-# Stores the coordinates of each money token graphic text
-token_coords = []
-# Stores coordinates of the cursor that show which token it landed on after a spin
+# Stores the coordinates of each money wedge graphic text
+wedge_coords = []
+# Stores coordinates of the cursor that show which wedge it landed on after a spin
 cursor_coords = [[], [], []]
 
 pygame.init()
@@ -55,8 +55,8 @@ time_since_movement = 0
 # To only run certain actions one (e.g setup)
 initial = True
 
-# Stores the visual graphics of each token
-tokens_render = []
+# Stores the visual graphics of each wedge
+wedges_render = []
 
 
 # returns a list that is ['a', 'b', 'c', 'd', ...]
@@ -161,28 +161,28 @@ def start():
 
 
 # Creates a list that stores the graphic of the text, along with its coordinates
-def create_tokens(token_list):
-    # Starting coordinates to draw the tokens
+def create_wedges(wedge_list):
+    # Starting coordinates to draw the wedges
     start_x = 64
     start_y = 64
-    # Stores the text to be rendered (tokens with "$" sign)
+    # Stores the text to be rendered (wedges with "$" sign)
     text_to_render = []
-    # Add to text_to_render with each token value but with "$" sign added
-    for token in token_list:
-        text_to_render.append("$" + str(token))
+    # Add to text_to_render with each wedge value but with "$" sign added
+    for wedge in wedge_list:
+        text_to_render.append("$" + str(wedge))
     # Store width of rendered text
     txt_width = 0
     for txt in text_to_render:
         # Render the label with the color blue
         label = font.render(txt, True, blue)
-        # Add the text graphic, it's x-coordinate and y-coordinate to tokens_render
-        # tokens_render will now have [[label1, label1_x_coordinate, label1_y_coordinate], ...]
-        tokens_render.append([label, start_x, start_y])
-        # Get the width of the current token graphic
+        # Add the text graphic, it's x-coordinate and y-coordinate to wedges_render
+        # wedges_render will now have [[label1, label1_x_coordinate, label1_y_coordinate], ...]
+        wedges_render.append([label, start_x, start_y])
+        # Get the width of the current wedge graphic
         txt_width = label.get_width()
-        # Store coordinates of each rendered token
-        token_coords.append([start_x, start_y])
-        # add that width to start_x so that the next token that is rendered will not be overlapping the previous rendered token
+        # Store coordinates of each rendered wedge
+        wedge_coords.append([start_x, start_y])
+        # add that width to start_x so that the next wedge that is rendered will not be overlapping the previous rendered wedge
         start_x += txt_width + 32
 
 
@@ -232,12 +232,12 @@ def guess_phrase():
 
 # Updates all the necessary data for the game
 def update():
-    global time_since_movement, token_coords, initial, command, score, tokens
+    global time_since_movement, wedge_coords, initial, command, score, wedges
     if initial is True:
-        # Creates the graphic of the text of each token
-        create_tokens(tokens)
-        # Sets the coordinates of the cursor to the very first token
-        set_cursor_coords(token_coords[0][0], token_coords[0][1])
+        # Creates the graphic of the text of each wedge
+        create_wedges(wedges)
+        # Sets the coordinates of the cursor to the very first wedge
+        set_cursor_coords(wedge_coords[0][0], wedge_coords[0][1])
         # Set inital to false as there is no need to call these variables again
         initial = False
 
@@ -247,40 +247,40 @@ def update():
     print("Command is " + command)
     winning_condition()
     if command:
-        # If a command exists, it is probably to shuffle between tokens and guess a letter/solve
+        # If a command exists, it is probably to shuffle between wedges and guess a letter/solve
         res = shuffle_cursor(command)
-        # Once shuffle_cursor returns the position of token that was chosen from the spin add that to the score
+        # Once shuffle_cursor returns the position of wedge that was chosen from the spin add that to the score
         if res:
-            score += tokens[res]
+            score += wedges[res]
 
 
-# This stores the time you'd want the cursor to stay on the token before moving to another (when spinning)
+# This stores the time you'd want the cursor to stay on the wedge before moving to another (when spinning)
 delay = 100
 # Alters the length of delay
 acceleration = 1
 
-# Method for cursor to move around and select a token
-# Then returns the index of the token AKA the money he chose
+# Method for cursor to move around and select a wedge
+# Then returns the index of the wedge AKA the money he chose
 # Call after spinning
 
 
 def shuffle_cursor(letter):
     global time_since_movement, delay, acceleration
-    chosen_coord = random.choice(token_coords)
-    # If the time it stays on one token before moving to another in the shuffle is greater than 1 second, use that token
+    chosen_coord = random.choice(wedge_coords)
+    # If the time it stays on one wedge before moving to another in the shuffle is greater than 1 second, use that wedge
     if delay >= 1000:
         # Where you get input for letter
         get_solve_state(letter)
-        # Returns position of the money won from the token list
-        return token_coords.index(chosen_coord)
+        # Returns position of the money won from the wedge list
+        return wedge_coords.index(chosen_coord)
     else:
-        # If the time since the cursor last moved is greater than delay variable, then move it to the randomnly chosen token
+        # If the time since the cursor last moved is greater than delay variable, then move it to the randomnly chosen wedge
         if time_since_movement >= delay:
-            # set the cursor coordinates to the coordinate of the chosen token
+            # set the cursor coordinates to the coordinate of the chosen wedge
             set_cursor_coords(chosen_coord[0], chosen_coord[1])
             # Reset time since cursor moved to 0
             time_since_movement = 0
-            # Increase the time requirement for cursor to move to next token
+            # Increase the time requirement for cursor to move to next wedge
             delay += acceleration
             # So that delay variable gets considerably longer after each iteration
             acceleration *= 2
@@ -288,7 +288,7 @@ def shuffle_cursor(letter):
 
 # Handles drawing to the screen
 def render():
-    global token_coords, cursor_coords, tokens_render
+    global wedge_coords, cursor_coords, wedges_render
     # Clear screen by painting it completely white
     screen.fill(white)
 
@@ -301,9 +301,9 @@ def render():
     score_font = font.render("Score: " + str(score), True, blue)
     screen.blit(score_font, (screen_width/2, screen_height/2))
 
-    # Draws all the token graphics onto the screen
-    for token in tokens_render:
-        screen.blit(token[0], (token[1], token[2]))
+    # Draws all the wedge graphics onto the screen
+    for wedge in wedges_render:
+        screen.blit(wedge[0], (wedge[1], wedge[2]))
     # Draw the cursor
     pygame.draw.polygon(screen, red, cursor_coords, 0)
     # Update scren
