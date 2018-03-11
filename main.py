@@ -106,8 +106,6 @@ def get_solve_state(letter):
             solve_state = "".join(tmp)
         # If letter chosen isnt found anywhere in solve state
         if len(indices) == 0:
-            aiy.audio.say("Letter not found")
-            print("Not found :(")
             score -= 200
             command = ''
             result = False
@@ -117,7 +115,7 @@ def get_solve_state(letter):
 
     else:
         score -= 200
-        print("ALREADY FOUND")
+        command = ""
         result = False
     return result
 
@@ -127,7 +125,6 @@ def winning_condition():
     global score, done, solve_state
     if score < 0:
         done = True
-
         aiy.audio.say("You Lost!")
         print("You ran out of money. You Lost!")
         return
