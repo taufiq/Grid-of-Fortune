@@ -299,7 +299,7 @@ def render():
 
     # Draw the progress of the sovle
     label = font.render(solve_state, True, blue)
-    screen.blit(label, (screen_width/2 - label.get_width(),
+    screen.blit(label, (screen_width/2 - label.get_width()/2,
                         screen_height - (label.get_height() / 2 * 3)))
 
     # Draw the current score
