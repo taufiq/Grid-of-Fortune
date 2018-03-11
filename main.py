@@ -223,7 +223,7 @@ def render():
     global wedge_coords, cursor_coords, wedges_render
     screen.fill(white)
     label = font.render(solve_state, True, blue)
-    screen.blit(label, (screen_width/2 - label.get_width(),
+    screen.blit(label, (screen_width/2 - label.get_width()/2,
                         screen_height - (label.get_height() / 2 * 3)))
     score_font = font.render("Score: " + str(score), True, blue)
     screen.blit(score_font, (screen_width/2, screen_height/2))
