@@ -18,7 +18,7 @@ screen_height = 1000
 
 pygame.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
-answer = "BANANA"
+answer = "HELLO WORLD"
 
 solve_state = ""
 
@@ -87,7 +87,7 @@ def get_solve_state(letter):
             command = ''
     else:
         score -= 200
-        print("ALREADY FOUND")
+        command = ''
         result = False
     return result
 
@@ -192,7 +192,7 @@ def update():
         initial = False
 
     time_since_movement += clock.get_time()
-    print("Command is " + command)
+    
     winning_condition()
     if command:
         res = shuffle_cursor(command)
