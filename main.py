@@ -16,6 +16,7 @@ green = (0, 255, 0)
 screen_width = 1000
 screen_height = 1000
 
+pygame.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
 answer = "BANANA"
 
@@ -50,6 +51,7 @@ aiy.audio.get_recorder().start()
 for letter in letters:
     recognizer.expect_phrase("letter " + letter)
 recognizer.expect_phrase("quit")
+
 
 def set_cursor_coords(x_pos, y_pos):
     global cursor_coords
@@ -100,7 +102,6 @@ def winning_condition():
 
 
 def start():
-    pygame.init()
     aiy.audio.say("To start, press V and say a letter, or quit to exit")
     global done, command
     while not done:
