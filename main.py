@@ -105,7 +105,7 @@ def start():
     aiy.audio.say("To start, press V and say a letter, or quit to exit")
     global done, command
     while not done:
-        clock.tick(60)
+        clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
