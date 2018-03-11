@@ -60,6 +60,7 @@ def set_cursor_coords(x_pos, y_pos):
     cursor_coords[2] = [x_pos + 8, y_pos]
 
 def get_solve_state(letter):
+    result = True
     print("Solve State Called")
     global solve_state, command, score
 
@@ -79,12 +80,15 @@ def get_solve_state(letter):
             print("Not found :(")
             score -= 200
             command = ''
+            result = False
         else:
             print(solve_state)
             command = ''
     else:
         score -= 200
         print("ALREADY FOUND")
+        result = False
+    return result
 
 
 def winning_condition():
@@ -102,7 +106,7 @@ def winning_condition():
 
 
 def start():
-    aiy.audio.say("To start, press V and say a letter, or quit to exit")
+    aiy.audio.say("To start, press v and say a letter, press c and say the answer or quit to exit")
     global done, command
     while not done:
         clock.tick(FPS)
@@ -201,8 +205,9 @@ def shuffle_cursor(letter):
     chosen_coord = random.choice(wedge_coords)
 
     if delay >= 1000:
-        get_solve_state(letter)
-        return wedge_coords.index(chosen_coord)
+        correct = get_solve_state(letter)
+        if correct:
+            return wedge_coords.index(chosen_coord)
     else:
         if time_since_movement >= delay:
             set_cursor_coords(chosen_coord[0], chosen_coord[1])
