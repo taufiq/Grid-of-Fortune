@@ -18,7 +18,9 @@ screen_width = 1000
 screen_height = 1000
 
 # Create screen with these specified sizes
+pygame.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
+#Answer
 answer = "BANANA"
 # Stores the progress of the solve
 solve_state = ""
@@ -33,13 +35,13 @@ for char in answer:
 
 # Creates a list of monies user can get from spinning
 wedges = [500, 200, 400, 100, 600, 450]
-
+# Stores the visual graphics of each wedge
+wedges_render = []
 # Stores the coordinates of each money wedge graphic text
 wedge_coords = []
 # Stores coordinates of the cursor that show which wedge it landed on after a spin
 cursor_coords = [[], [], []]
 
-pygame.init()
 # Creates a font for drawing text
 font = pygame.font.SysFont("monospace", 65)
 
@@ -55,13 +57,14 @@ time_since_movement = 0
 # To only run certain actions one (e.g setup)
 initial = True
 
-# Stores the visual graphics of each wedge
-wedges_render = []
-
-
 # returns a list that is ['a', 'b', 'c', 'd', ...]
 letters = list('abcdefghijklmnopqrstuvwxyz')
 command = ''
+
+# This stores the time you'd want the cursor to stay on the wedge before moving to another (when spinning)
+delay = 100
+# Alters the length of delay
+acceleration = 1
 
 # Initializes the recognizer
 recognizer = aiy.cloudspeech.get_recognizer()
@@ -82,6 +85,7 @@ def set_cursor_coords(x_pos, y_pos):
 
 
 def get_solve_state(letter):
+    result = True
     print("Solve State Called")
     global solve_state, command, score
     # Convert the letter to an uppercase
@@ -107,6 +111,7 @@ def get_solve_state(letter):
             print("Not found :(")
             score -= 200
             command = ''
+            result = False
         else:
             print(solve_state)
             command = ''
@@ -114,6 +119,8 @@ def get_solve_state(letter):
     else:
         score -= 200
         print("ALREADY FOUND")
+        result = False
+    return result
 
 
 # Checks for winning / Losing condition: Score < 0 loss; all blanks filled = win
@@ -134,7 +141,7 @@ def winning_condition():
 
 # The main game loop
 def start():
-    aiy.audio.say("To start, press V and say a letter, or quit to exit")
+    aiy.audio.say("To start, press v and say a letter, press c and say the answer or quit to exit")
     global done, command
     # While the done variable is equal to False, run this loop
     while not done:
@@ -244,7 +251,7 @@ def update():
     # clock.get_time() calculates the time since the last frame was called
     # time_since_movement keeps track of total time passed since cursor moved
     time_since_movement += clock.get_time()
-    print("Command is " + command)
+
     winning_condition()
     if command:
         # If a command exists, it is probably to shuffle between wedges and guess a letter/solve
@@ -253,11 +260,6 @@ def update():
         if res:
             score += wedges[res]
 
-
-# This stores the time you'd want the cursor to stay on the wedge before moving to another (when spinning)
-delay = 100
-# Alters the length of delay
-acceleration = 1
 
 # Method for cursor to move around and select a wedge
 # Then returns the index of the wedge AKA the money he chose
@@ -270,9 +272,13 @@ def shuffle_cursor(letter):
     # If the time it stays on one wedge before moving to another in the shuffle is greater than 1 second, use that wedge
     if delay >= 1000:
         # Where you get input for letter
-        get_solve_state(letter)
+        correct = get_solve_state(letter)
+        set_cursor_coords(chosen_coord[0], chosen_coord[1])
+        acceleration = 1
+        delay = 100
         # Returns position of the money won from the wedge list
-        return wedge_coords.index(chosen_coord)
+        if correct:
+            return wedge_coords.index(chosen_coord)
     else:
         # If the time since the cursor last moved is greater than delay variable, then move it to the randomnly chosen wedge
         if time_since_movement >= delay:
