@@ -18,7 +18,7 @@ screen_height = 1000
 
 pygame.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
-answer = "HELLO WORLD"
+answer = "BANANA"
 
 solve_state = ""
 
@@ -60,6 +60,7 @@ def set_cursor_coords(x_pos, y_pos):
     cursor_coords[2] = [x_pos + 8, y_pos]
 
 
+
 def get_solve_state(letter):
     result = True
     print("Solve State Called")
@@ -78,6 +79,7 @@ def get_solve_state(letter):
 
         if len(indices) == 0:
 
+
             score -= 200
             command = ''
             result = False
@@ -89,7 +91,6 @@ def get_solve_state(letter):
         command = ''
         result = False
     return result
-
 
 def winning_condition():
     global score, done, solve_state
@@ -165,8 +166,8 @@ def process_text(text):
                     print("Letter is " + letter)
                     command = letter
                     break
-                else:
-                    print("Invalid")
+            if not command:
+                print("Invalid command")
 
 
 def guess_phrase():
