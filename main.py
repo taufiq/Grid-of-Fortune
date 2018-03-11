@@ -25,7 +25,8 @@ solve_state = ""
 for char in answer:
     if char is not " ":
         solve_state += "_"
-    solve_state += " "
+    else:
+        solve_state += " "
 
 
 wedges = [500, 200, 400, 100, 600, 450]
