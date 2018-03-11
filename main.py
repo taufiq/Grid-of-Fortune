@@ -59,6 +59,7 @@ def set_cursor_coords(x_pos, y_pos):
     cursor_coords[1] = [x_pos + 16, y_pos - 16]
     cursor_coords[2] = [x_pos + 8, y_pos]
 
+
 def get_solve_state(letter):
     result = True
     print("Solve State Called")
@@ -106,7 +107,8 @@ def winning_condition():
 
 
 def start():
-    aiy.audio.say("To start, press v and say a letter, press c and say the answer or quit to exit")
+    aiy.audio.say(
+        "To start, press v and say a letter, press c and say the answer or quit to exit")
     global done, command
     while not done:
         clock.tick(FPS)
@@ -198,8 +200,6 @@ def update():
             score += wedges[res]
 
 
-
-
 def shuffle_cursor(letter):
     global time_since_movement, delay, acceleration
     chosen_coord = random.choice(wedge_coords)
@@ -207,6 +207,8 @@ def shuffle_cursor(letter):
     if delay >= 1000:
         correct = get_solve_state(letter)
         set_cursor_coords(chosen_coord[0], chosen_coord[1])
+        acceleration = 1
+        delay = 100
         if correct:
             return wedge_coords.index(chosen_coord)
     else:
