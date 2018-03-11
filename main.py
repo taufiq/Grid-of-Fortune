@@ -32,7 +32,7 @@ for char in answer:
     solve_state += " "
 
 # Creates a list of monies user can get from spinning
-wedges = [500, 200, 400, 100, 600, 450]
+wedges = [500, 200, 400, 100, 600]
 # Stores the visual graphics of each wedge
 wedges_render = []
 # Stores the coordinates of each money wedge graphic text
@@ -297,7 +297,7 @@ def render():
     # Clear screen by painting it completely white
     screen.fill(white)
 
-    # Draw the progress of the sovle
+    # Draw the progress of the solve
     label = font.render(solve_state, True, blue)
     screen.blit(label, (screen_width/2 - label.get_width()/2,
                         screen_height - (label.get_height() / 2 * 3)))
