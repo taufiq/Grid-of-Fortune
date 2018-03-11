@@ -20,7 +20,7 @@ screen_height = 1000
 # Create screen with these specified sizes
 pygame.init()
 screen = pygame.display.set_mode((screen_width, screen_height))
-#Answer
+# Answer
 answer = "BANANA"
 # Stores the progress of the solve
 solve_state = ""
@@ -29,9 +29,7 @@ for char in answer:
     # If there is a letter, add a space to solve_state
     if char is not " ":
         solve_state += "_"
-    else:
-        # If it is a space, add a space to solve_state
-        solve_state += " "
+    solve_state += " "
 
 # Creates a list of monies user can get from spinning
 wedges = [500, 200, 400, 100, 600, 450]
@@ -141,7 +139,8 @@ def winning_condition():
 
 # The main game loop
 def start():
-    aiy.audio.say("To start, press v and say a letter, press c and say the answer or quit to exit")
+    aiy.audio.say(
+        "To start, press v and say a letter, press c and say the answer or quit to exit")
     global done, command
     # While the done variable is equal to False, run this loop
     while not done:
