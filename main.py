@@ -206,8 +206,8 @@ def shuffle_cursor(letter):
 
     if delay >= 1000:
         correct = get_solve_state(letter)
+        set_cursor_coords(chosen_coord[0], chosen_coord[1])
         if correct:
-            set_cursor_coords(chosen_coord[0], chosen_coord[1])
             return wedge_coords.index(chosen_coord)
     else:
         if time_since_movement >= delay:
