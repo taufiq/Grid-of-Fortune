@@ -48,7 +48,6 @@ acceleration = 1
 
 recognizer = aiy.cloudspeech.get_recognizer()
 aiy.audio.get_recorder().start()
-
 for letter in letters:
     recognizer.expect_phrase("letter " + letter)
 recognizer.expect_phrase("quit")
@@ -78,8 +77,7 @@ def get_solve_state(letter):
             solve_state = "".join(tmp)
 
         if len(indices) == 0:
-            
-           
+
             score -= 200
             command = ''
             result = False
