@@ -29,7 +29,8 @@ for char in answer:
     # If there is a letter, add a space to solve_state
     if char is not " ":
         solve_state += "_"
-    solve_state += " "
+    else:
+        solve_state += " "
 
 # Creates a list of monies user can get from spinning
 wedges = [500, 200, 400, 100, 600]
@@ -298,7 +299,7 @@ def render():
     screen.fill(white)
 
     # Draw the progress of the solve
-    label = font.render(solve_state, True, blue)
+    label = font.render(" ".join(list(solve_state)), True, blue)
     screen.blit(label, (screen_width/2 - label.get_width()/2,
                         screen_height - (label.get_height() / 2 * 3)))
 
