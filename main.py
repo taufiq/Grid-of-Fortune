@@ -139,7 +139,7 @@ def start():
     # While the done variable is equal to False, run this loop
     while not done:
         # Locks at 60fps
-        clock.tick(60)
+        clock.tick(FPS)
         for event in pygame.event.get():
             # If user presses the close button, set done to True and exit loop
             if event.type == pygame.QUIT:
