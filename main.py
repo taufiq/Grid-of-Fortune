@@ -27,7 +27,6 @@ for char in answer:
     else:
         solve_state += " "
 
-
 wedges = [500, 200, 400, 100, 600, 450]
 wedges_render = []
 wedge_coords = []
@@ -42,6 +41,8 @@ initial = True
 letters = list('abcdefghijklmnopqrstuvwxyz')
 command = ''
 
+delay = 100
+acceleration = 1
 
 recognizer = aiy.cloudspeech.get_recognizer()
 aiy.audio.get_recorder().start()
@@ -50,13 +51,11 @@ for letter in letters:
     recognizer.expect_phrase("letter " + letter)
 recognizer.expect_phrase("quit")
 
-
 def set_cursor_coords(x_pos, y_pos):
     global cursor_coords
     cursor_coords[0] = [x_pos, y_pos - 16]
     cursor_coords[1] = [x_pos + 16, y_pos - 16]
     cursor_coords[2] = [x_pos + 8, y_pos]
-
 
 def get_solve_state(letter):
     print("Solve State Called")
@@ -194,9 +193,6 @@ def update():
             score += wedges[res]
 
 
-delay = 100
-
-acceleration = 1
 
 
 def shuffle_cursor(letter):
