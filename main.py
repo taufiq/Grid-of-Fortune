@@ -25,8 +25,8 @@ solve_state = ""
 for char in answer:
     if char is not " ":
         solve_state += "_"
-    else:
-        solve_state += " "
+    solve_state += " "
+
 
 wedges = [500, 200, 400, 100, 600, 450]
 wedges_render = []
@@ -192,7 +192,7 @@ def update():
         initial = False
 
     time_since_movement += clock.get_time()
-    
+
     winning_condition()
     if command:
         res = shuffle_cursor(command)
