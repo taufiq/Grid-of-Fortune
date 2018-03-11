@@ -218,8 +218,8 @@ def process_text(text):
                     print("Letter is " + letter)
                     command = letter
                     break
-                else:
-                    print("Invalid")
+            if not command:
+                print("Invalid command")
 
 
 def guess_phrase():
