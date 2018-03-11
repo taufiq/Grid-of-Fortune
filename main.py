@@ -43,7 +43,6 @@ letters = list('abcdefghijklmnopqrstuvwxyz')
 command = ''
 
 
-pygame.init()
 recognizer = aiy.cloudspeech.get_recognizer()
 aiy.audio.get_recorder().start()
 
@@ -102,6 +101,7 @@ def winning_condition():
 
 
 def start():
+    pygame.init()
     aiy.audio.say("To start, press V and say a letter, or quit to exit")
     global done, command
     while not done:
