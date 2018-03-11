@@ -78,8 +78,8 @@ def get_solve_state(letter):
             solve_state = "".join(tmp)
 
         if len(indices) == 0:
-            aiy.audio.say("Letter not found")
-            print("Not found :(")
+            
+           
             score -= 200
             command = ''
             result = False
